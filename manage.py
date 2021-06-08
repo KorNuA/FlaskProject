@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
+from flask_wtf.csrf import CSRFProtect
 import pymysql
 # Python2&Python3数据库相互转换
 pymysql.install_as_MySQLdb()
@@ -27,6 +28,9 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 # Redis数据库对象
 redis_store = StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT, decode_responses=True)
+
+# CSRF保护机制
+CSRFProtect(app)
 
 
 @app.route("/index")
