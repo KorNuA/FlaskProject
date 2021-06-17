@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from redis import StrictRedis
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 import pymysql
 # Python2&Python3数据库相互转换
 pymysql.install_as_MySQLdb()
@@ -45,6 +47,14 @@ CSRFProtect(app)
 # Session工具类
 Session(app)
 
+# 管理对象
+manager = Manager(app)
+
+# 迁移对象
+Migrate(app, db)
+
+manager.add_command("db", MigrateCommand)
+
 
 @app.route("/index")
 def index():
@@ -52,4 +62,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run()
+    manager.run()
